@@ -3,13 +3,13 @@
 # Replace this with code for your specific list
 
 # Routes should be self-explanatory
-from pymongo import MongoClient
+import motor.motor_asyncio
 import os
 
 async def prepare(app):
     """This sets up the mongodb database. It is a TODO"""
     # TODO: ask toxic if this is correct?
-    app.mongo = MongoClient(os.environ.get("MONGO_URL"), os.environ.get("MONGO_PORT"))[os.environ.get("MONGO_DBNAME")]
+    app.mongo = motor.motor_asyncio.AsyncIOMotorClient(os.environ.get("MONGO_URL"))[os.environ.get("MONGO_DBNAME")]
 
 async def claim(app, bot):
     bot = await app.mongo.bots.find_one({"botID": bot.bot_id})
