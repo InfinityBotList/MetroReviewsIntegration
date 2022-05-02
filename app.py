@@ -1,5 +1,8 @@
 import json
 
+# This contains the list specific code
+import act
+
 from fastapi import FastAPI
 from fastapi.responses import ORJSONResponse
 from pydantic import BaseModel
@@ -14,27 +17,40 @@ async def _auth(key: str) -> ORJSONResponse | None:
         return ORJSONResponse({"detail": "Invalid secret key"}, status_code=401)
 
 auth_header = APIKeyHeader(name='Authorization')
-    
+
+class Bot(BaseModel):
+    bot_id: str
+
 # Metro Reviews routes
 @app.get("/claim")
-async def claim(auth: str = Depends(auth_header)):
+async def claim(bot: Bot, auth: str = Depends(auth_header)):
     if (auth := await _auth(auth)):
         return auth 
+    
+    return (await act.claim(app, bot)) or {}
 
 @app.get("/unclaim")
-async def unclaim(auth: str = Depends(auth_header)):
+async def unclaim(bot: Bot, auth: str = Depends(auth_header)):
     if (auth := await _auth(auth)):
         return auth 
+    
+    return (await act.unclaim(app, bot)) or {}
 
     
 @app.get("/approve")
-async def approve(auth: str = Depends(auth_header)):
+async def approve(bot: Bot, auth: str = Depends(auth_header)):
     if (auth := await _auth(auth)):
         return auth 
 
+    return (await act.approve(app, bot)) or {}
 
 @app.get("/deny")
-async def deny(auth: str = Depends(auth_header)):
+async def deny(bot: Bot, auth: str = Depends(auth_header)):
     if (auth := await _auth(auth)):
         return auth 
+    
+    return (await act.deny(app, bot)) or {}
 
+@app.on_event("startup")
+async def prepare():
+    await act.prepare(app)
