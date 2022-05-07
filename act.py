@@ -39,6 +39,7 @@ async def approve(app, bot):
             "nsfw": bot.nsfw
             "description": bot.description,
             "long_description": bot.long_description,
+            "tags": ", ".join(bot.tags)
             "invite": bot.invite or f"https://discord.com/oauth2/authorize?client_id={bot.bot_id}&permissions=0&scope=bot%20applications.commands"
         })
     await app.mongo.bots.update_one({"botID": bot.bot_id}, {"$set": {"type": "approved"}})
