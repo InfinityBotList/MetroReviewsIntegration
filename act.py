@@ -26,7 +26,12 @@ async def claim(app, bot):
     # TODO: ask toxic to make a proper claim embed
 
 async def unclaim(app, bot):
-    ...
+    bot = await app.mongo.bots.find_one({"botID": bot.bot_id})
+    if not bot:
+        # We do not want to send any thing or do anything in claim/unclaim/deny if bot does not already exist
+        return
+    
+    await app.mongo.bots.update_one({"botID": bot.bot_id}, {"$set": {"claimed": False, "claimedBy": ""}})
 
 async def approve(app, bot):
     bot = await app.mongo.bots.find_one({"botID": bot.bot_id})
@@ -58,4 +63,9 @@ async def approve(app, bot):
     await app.mongo.bots.update_one({"botID": bot.bot_id}, {"$set": {"type": "approved"}})
 
 async def deny(app, bot):
-    ...
+    bot = await app.mongo.bots.find_one({"botID": bot.bot_id})
+    if not bot:
+        # We do not want to send any thing or do anything in claim/unclaim/deny if bot does not already exist
+        return
+
+    await app.mongo.bots.update_one({"botID": bot.bot_id}, {"$set": {"type": "denied"}})
