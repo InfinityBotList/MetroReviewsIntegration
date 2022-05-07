@@ -3,8 +3,9 @@ import json
 # This contains the list specific code
 import act
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from fastapi.responses import ORJSONResponse
+from fastapi.security.api_key import APIKeyHeader
 from pydantic import BaseModel
 
 app = FastAPI()
