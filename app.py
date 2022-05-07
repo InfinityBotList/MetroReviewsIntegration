@@ -24,11 +24,13 @@ class Bot(BaseModel):
     username: str
     description: str
     long_description: str
-    website: str
-    support: str
-    donate: str
-    library: str
     nsfw: bool
+    tags: list[str]
+    website: str | None = None
+    support: str | None = None
+    donate: str | None = None
+    library: str | None = None
+    prefix: str | None = None
 
 # Metro Reviews routes
 @app.get("/claim")
