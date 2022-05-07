@@ -27,6 +27,7 @@ class Bot(BaseModel):
     nsfw: bool
     tags: list[str]
     website: str | None = None
+    github: str | None = None # May be added later
     support: str | None = None
     donate: str | None = None
     library: str | None = None
