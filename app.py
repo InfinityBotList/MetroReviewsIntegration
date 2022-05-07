@@ -20,6 +20,14 @@ auth_header = APIKeyHeader(name='Authorization')
 
 class Bot(BaseModel):
     bot_id: str
+    reviewer: str
+    username: str
+    description: str
+    long_description: str
+    website: str
+    support: str
+    donate: str
+    library: str
 
 # Metro Reviews routes
 @app.get("/claim")
