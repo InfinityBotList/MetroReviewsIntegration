@@ -28,6 +28,7 @@ class Bot(BaseModel):
     support: str
     donate: str
     library: str
+    nsfw: bool
 
 # Metro Reviews routes
 @app.get("/claim")
