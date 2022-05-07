@@ -30,7 +30,11 @@ async def approve(app, bot):
     bot = await app.mongo.bots.find_one({"botID": bot.bot_id})
     if not bot:
         # We need to insert a bot here
-        ...
+        await app.mongo.bots.insert_one({
+            "botID": bot.bot_id,
+            "botName": bot.username,
+            "prefix": bot.prefix or "/"
+        })
     await app.mongo.bots.update_one({"botID": bot.bot_id}, {"$set": {"type": "approved"}})
 
 async def deny(app, bot):
