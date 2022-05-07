@@ -51,7 +51,7 @@ async def approve(app, bot):
             "library": bot.library,
             "description": bot.description,
             "long_description": bot.long_description,
-            "tags": ", ".join(bot.tags)
+            "tags": ", ".join(bot.tags),
             "invite": bot.invite or f"https://discord.com/oauth2/authorize?client_id={bot.bot_id}&permissions=0&scope=bot%20applications.commands",
             "main_owner": bot.owner,
             "additional_owners": bot.extra_owners,
