@@ -33,7 +33,14 @@ async def approve(app, bot):
         await app.mongo.bots.insert_one({
             "botID": bot.bot_id,
             "botName": bot.username,
-            "prefix": bot.prefix or "/"
+            "prefix": bot.prefix or "/",
+            "website": bot.website or "None",
+            "github": bot.github or "None",
+            "donate": bot.donate or "None",
+            "nsfw": bot.nsfw
+            "description": bot.description,
+            "long_description": bot.long_description,
+            "invite": bot.invite or f"https://discord.com/oauth2/authorize?client_id={bot.bot_id}&permissions=0&scope=bot%20applications.commands"
         })
     await app.mongo.bots.update_one({"botID": bot.bot_id}, {"$set": {"type": "approved"}})
 
