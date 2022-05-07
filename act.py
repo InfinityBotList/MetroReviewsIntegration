@@ -14,8 +14,7 @@ async def prepare(app):
 async def claim(app, bot):
     bot = await app.mongo.bots.find_one({"botID": bot.bot_id})
     if not bot:
-        # We do not want to send any thing or do anything in claim/unclaim/deny. Maybe approve but thats for toxic to decide
-        # TODO: Ask toxic
+        # We do not want to send any thing or do anything in claim/unclaim/deny if bot does not already exist
         return
     
     # Hopefully
