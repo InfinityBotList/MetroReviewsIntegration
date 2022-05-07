@@ -26,6 +26,8 @@ class Bot(BaseModel):
     long_description: str
     nsfw: bool
     tags: list[str]
+    owner: str
+    extra_owners: list[str]
     website: str | None = None
     github: str | None = None # May be added later
     support: str | None = None
