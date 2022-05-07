@@ -37,14 +37,14 @@ class Bot(BaseModel):
     prefix: str | None = None
 
 # Metro Reviews routes
-@app.get("/claim")
+@app.post("/claim")
 async def claim(bot: Bot, auth: str = Depends(auth_header)):
     if (auth := await _auth(auth)):
         return auth 
     
     return (await act.claim(app, bot)) or {}
 
-@app.get("/unclaim")
+@app.post("/unclaim")
 async def unclaim(bot: Bot, auth: str = Depends(auth_header)):
     if (auth := await _auth(auth)):
         return auth 
@@ -52,14 +52,14 @@ async def unclaim(bot: Bot, auth: str = Depends(auth_header)):
     return (await act.unclaim(app, bot)) or {}
 
     
-@app.get("/approve")
+@app.post("/approve")
 async def approve(bot: Bot, auth: str = Depends(auth_header)):
     if (auth := await _auth(auth)):
         return auth 
 
     return (await act.approve(app, bot)) or {}
 
-@app.get("/deny")
+@app.post("/deny")
 async def deny(bot: Bot, auth: str = Depends(auth_header)):
     if (auth := await _auth(auth)):
         return auth 
