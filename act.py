@@ -5,6 +5,9 @@
 # Routes should be self-explanatory
 import motor.motor_asyncio
 import os
+import secrets
+import re
+import datetime
 
 async def prepare(app):
     """This sets up the mongodb database. It is a TODO"""
@@ -32,15 +35,25 @@ async def approve(app, bot):
         await app.mongo.bots.insert_one({
             "botID": bot.bot_id,
             "botName": bot.username,
+            "vanity": re.sub('[^a-zA-Z0-9]', '', bot.username).lower(),
+            "note": "Metro-approved",
+            "date": datetime.datetime.now(),
             "prefix": bot.prefix or "/",
             "website": bot.website or "None",
             "github": bot.github or "None",
             "donate": bot.donate or "None",
-            "nsfw": bot.nsfw
+            "nsfw": bot.nsfw,
+            "library": bot.library,
             "description": bot.description,
             "long_description": bot.long_description,
             "tags": ", ".join(bot.tags)
-            "invite": bot.invite or f"https://discord.com/oauth2/authorize?client_id={bot.bot_id}&permissions=0&scope=bot%20applications.commands"
+            "invite": bot.invite or f"https://discord.com/oauth2/authorize?client_id={bot.bot_id}&permissions=0&scope=bot%20applications.commands",
+            "main_owner": bot.owner,
+            "additional_owners": bot.extra_owners,
+            "webAuth": "None",
+            "webURL": "None",
+            "webhook": "None",
+            "token": secrets.token_urlsafe()
         })
     await app.mongo.bots.update_one({"botID": bot.bot_id}, {"$set": {"type": "approved"}})
 
