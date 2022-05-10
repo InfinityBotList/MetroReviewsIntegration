@@ -28,6 +28,7 @@ class Bot(BaseModel):
     nsfw: bool
     tags: list[str]
     owner: str
+    reason: str | None = "STUB_REASON"
     extra_owners: list[str]
     website: str | None = None
     github: str | None = None # May be added later
@@ -35,6 +36,7 @@ class Bot(BaseModel):
     donate: str | None = None
     library: str | None = None
     prefix: str | None = None
+    invite: str | None = None
 
 # Metro Reviews routes
 @app.post("/claim")
@@ -42,14 +44,14 @@ async def claim(bot: Bot, auth: str = Depends(auth_header)):
     if (auth := await _auth(auth)):
         return auth 
     
-    return (await act.claim(app, bot)) or {}
+    return (await act.claim(app, bot, secrets)) or {}
 
 @app.post("/unclaim")
 async def unclaim(bot: Bot, auth: str = Depends(auth_header)):
     if (auth := await _auth(auth)):
         return auth 
     
-    return (await act.unclaim(app, bot)) or {}
+    return (await act.unclaim(app, bot, secrets)) or {}
 
     
 @app.post("/approve")
@@ -57,14 +59,14 @@ async def approve(bot: Bot, auth: str = Depends(auth_header)):
     if (auth := await _auth(auth)):
         return auth 
 
-    return (await act.approve(app, bot)) or {}
+    return (await act.approve(app, bot, secrets)) or {}
 
 @app.post("/deny")
 async def deny(bot: Bot, auth: str = Depends(auth_header)):
     if (auth := await _auth(auth)):
         return auth 
     
-    return (await act.deny(app, bot)) or {}
+    return (await act.deny(app, bot, secrets)) or {}
 
 @app.on_event("startup")
 async def prepare():
