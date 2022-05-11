@@ -37,6 +37,7 @@ class Bot(BaseModel):
     library: str | None = None
     prefix: str | None = None
     invite: str | None = None
+    cross_add: bool | None = None
 
 # Metro Reviews routes
 @app.post("/claim")

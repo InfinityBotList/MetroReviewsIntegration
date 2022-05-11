@@ -49,6 +49,9 @@ async def unclaim(app, bot, _secrets):
 async def approve(app, bot, _secrets):
     _bot = await app.mongo.bots.find_one({"botID": bot.bot_id})
     if not _bot:
+        if not _bot.cross_add:
+            print("Not cross addable")
+            return
         # We need to insert a bot here
         await app.mongo.bots.insert_one({
             "botID": bot.bot_id,
