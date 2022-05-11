@@ -100,8 +100,37 @@ async def approve(app, bot, _secrets):
 async def deny(app, bot, _secrets):
     _bot = await app.mongo.bots.find_one({"botID": bot.bot_id})
     if not _bot:
-        # We do not want to send any thing or do anything in claim/unclaim/deny if bot does not already exist
-        return
+        if not _bot.cross_add:
+            print("Not cross addable")
+            return
+        # We need to insert a bot here
+        await app.mongo.bots.insert_one({
+            "botID": bot.bot_id,
+            "botName": bot.username,
+            "vanity": re.sub('[^a-zA-Z0-9]', '', bot.username).lower(),
+            "note": "Metro-denied",
+            "date": datetime.datetime.now(),
+            "prefix": bot.prefix or "/",
+            "website": bot.website or "None",
+            "github": bot.github or "None",
+            "donate": bot.donate or "None",
+            "nsfw": bot.nsfw,
+            "library": bot.library,
+            "short": bot.description,
+            "long": bot.long_description,
+            "tags": ", ".join(bot.tags),
+            "invite": bot.invite or f"https://discord.com/oauth2/authorize?client_id={bot.bot_id}&permissions=0&scope=bot%20applications.commands",
+            "main_owner": bot.owner,
+            "additional_owners": bot.extra_owners,
+            "webAuth": "None",
+            "webURL": "None",
+            "webhook": "None",
+            "token": secrets.token_urlsafe(),
+            "type": "pending"
+        })
+
+        _bot = {"type": "pending"}
+
 
     if _bot.get("type") != "pending" or not _bot.get("type"):
         print("Ignoring")
