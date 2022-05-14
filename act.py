@@ -40,7 +40,7 @@ async def unclaim(app, bot, _secrets):
         # We do not want to send any thing or do anything in claim/unclaim/deny if bot does not already exist
         return
 
-    if bot["type"] != "pending":
+    if _bot["type"] != "pending":
         print("Ignoring")
         return
     
