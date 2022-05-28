@@ -7,6 +7,7 @@ from fastapi import FastAPI, Depends
 from fastapi.responses import ORJSONResponse
 from fastapi.security.api_key import APIKeyHeader
 from pydantic import BaseModel
+from typing import List
 
 app = FastAPI()
 
@@ -26,7 +27,7 @@ class Bot(BaseModel):
     description: str
     long_description: str
     nsfw: bool
-    tags: list[str]
+    tags: List[str]
     owner: str
     reason: str | None = "STUB_REASON"
     extra_owners: list[str]
