@@ -7,6 +7,7 @@ from fastapi import FastAPI, Depends
 from fastapi.responses import ORJSONResponse
 from fastapi.security.api_key import APIKeyHeader
 from pydantic import BaseModel
+import asyncio
 
 app = FastAPI()
 
@@ -28,6 +29,7 @@ class Bot(BaseModel):
     nsfw: bool
     tags: list[str]
     owner: str
+    list_source: str | None = None
     reason: str | None = "STUB_REASON"
     extra_owners: list[str]
     website: str | None = None
@@ -72,3 +74,4 @@ async def deny(bot: Bot, auth: str = Depends(auth_header)):
 @app.on_event("startup")
 async def prepare():
     await act.prepare(app)
+    asyncio.create_task(act.integrase(app))

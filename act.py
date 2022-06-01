@@ -11,8 +11,25 @@ import datetime
 import discord
 import utils
 import asyncio
+import aiohttp
 
 modlogs = 911907978926493716
+
+async def integrase(app):
+    print("[Integrase] Start")
+    while True:
+        async with aiohttp.ClientSession() as sess:
+            async with sess.get("https://catnip.metrobots.xyz/bots") as resp:
+                if not resp.ok:
+                    continue
+                resp = await resp.json()
+                for bot in resp:
+                    if not bot["cross_add"]:
+                        continue
+                    _bot = await app.mongo.bots.find_one({"botID": bot["bot_id"]})
+                    if not _bot:
+                        print("[Integrase]", bot["bot_id"])
+        await asyncio.sleep(60*30)
 
 async def prepare(app):
     """This sets up the mongodb database. It is a TODO"""
@@ -50,8 +67,9 @@ async def approve(app, bot, _secrets):
     _bot = await app.mongo.bots.find_one({"botID": bot.bot_id})
     if not _bot:
         if not bot.cross_add:
-            print("Not cross addable")
-            return
+            if bot.list_source != "3b50d5e8-d0a0-4e63-aff7-f81068e9ad36":
+                print("Not cross addable")
+                return
         # We need to insert a bot here
         await app.mongo.bots.insert_one({
             "botID": bot.bot_id,
